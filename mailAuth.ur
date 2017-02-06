@@ -14,7 +14,7 @@ table userLinks : {Id : int,
 									 WhenRequested : time,
 									 Approved : bool,
 									 TokenHash : string,
-									 TokenSalt : string
+									 TokenSalt : string,
 									 UserName : string,
 									 Email : string, }
 									PRIMARY KEY UserName,
