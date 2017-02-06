@@ -29,17 +29,17 @@ table userTokens : {Id : int,
 											 PRIMARY KEY Id, CONSTRAINT Id UNIQUE Id 
 
 fun _addEmailLink (u : string) (e : addr) : transaction unit =
-		requestTime <- now ();
+		requestTime <- now;
 		myToken <- token 40;
 		newId <- nextval ids;
 		dml (INSERT INTO
 					 userLinks (Id, UserName, Email, WhenRequested, Approved, TokenHash, TokenSalt) 
 				 VALUES 
 					 (
-						 {newId},
+						 {show newId},
 						 {u},
 						 {show e}, 
-						 {requestTime}, 
+						 {show requestTime},
 						 False,
 						 {getHash myToken.Hash},
 						 {getSalt myToken.Salt}
@@ -47,7 +47,8 @@ fun _addEmailLink (u : string) (e : addr) : transaction unit =
 				)
 
 fun usernameExists (username : string) : transaction bool =
-		Top.nonempty (SELECT * FROM userCredentials WHERE UserName = {username})
+		rows <- queryL (SELECT * FROM userCredentials WHERE userCredentials.UserName = {[username]});
+		return (rows <> [])
 
 fun addEmailLink (u : user) (e : addr) : transaction unit =
 		_addEmailLink (show u) e
