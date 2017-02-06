@@ -58,20 +58,20 @@ fun writeAccount (u : string) (p : string) : transaction bool =
 		if
 				exists
 		then
-				return false
+				return False
 		else
 				dml (INSERT INTO userCredentials (UserName, Hash, Salt) VALUES ({u}, {getHash hashedPass}, {getSalt hashedPass}));
-				return true
+				return True
 
 fun newAccount (u : string) (p : string) (e : addr) : transaction bool =
 		exists <- writeAccount u p;
 		if
 				exists
 		then
-				return false
+				return False
 		else
 				_addEmailLink u e;
-				return true
+				return True
 
 fun blessEmailLink (u : string) (t : token) : transaction bool =
 		timeNow <- now;
@@ -87,7 +87,7 @@ fun blessEmailLink (u : string) (t : token) : transaction bool =
 						return False
 
 fun _getEmails (username : string) : transaction list addr =
-		rows <- queryL (SELECT (Email) FROM userLinks WHERE Approved = true AND UserName = username);
+		rows <- queryL (SELECT (Email) FROM userLinks WHERE Approved = True AND UserName = username);
 		return (List.mp (x => read x.Email) rows)
 
 fun signIn (username : string) (password : string) : transaction option user =
