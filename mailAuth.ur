@@ -54,8 +54,7 @@ fun addEmailLink (u : user) (e : addr) : transaction unit =
 
 fun writeAccount (u : string) (p : string) : transaction bool =
 		exists <- usernameExists u;
-		
-		hashedPass <- hash p
+		hashedPass <- hash p;
 		if
 				exists
 		then
