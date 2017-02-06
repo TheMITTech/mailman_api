@@ -87,18 +87,19 @@ fun blessEmailLink (u : string) (t : token) : transaction bool =
 				else
 						return False
 
-fun _getEmails (username : string) : transaction list addr =
-		rows <- queryL (SELECT (Email) FROM userLinks WHERE Approved = True AND UserName = {username});
+fun _getEmails (username : string) : transaction (list addr) =
+		rows <- queryL (SELECT (Email) FROM userLinks WHERE Approved = True AND UserName = {[username]});
 		return (List.mp (fn x => read x.Email) rows)
 
-fun signIn (username : string) (password : string) : transaction option user =
-		rows <- queryL (SELECT * FROM userCredentials WHERE UserName = {username});
+fun signIn (username : string) (password : string) : transaction (option user) =
+		rows <- queryL (SELECT * FROM userCredentials WHERE userCredentials.UserName = {[username]});
 		releventEmails <- _getEmails username;
 		case rows of
 				[] => return None
-			| row :: _ => correctPassword <- verify password row.Hash row.Salt;
+			| row :: _ => 
+				correctPassword <- verify password row.Hash row.Salt;
 				if correctPassword then
-						return Some username(*{UserName = username, Emails = releventEmails}*)
+						return (Some username)(* (Some {UserName = username, Emails = releventEmails}) *)
 				else
 						return None
 
@@ -106,10 +107,10 @@ fun newToken (u : user) : transaction token =
 		tokenOut <- Crypto.token 100;
 		timeNow <- now;
 		newId <- nextval ids;
-		dml (INSERT INTO userTokens (TokenHash, TokenSalt, WhenCreated, UserName) VALUES ({Crypto.getHash (tokenOut.Hash)}, {Crypto.getSalt (tokenOut.Hash)}, {timeNow}, {show user}));
+		dml (INSERT INTO userTokens (TokenHash, TokenSalt, WhenCreated, UserName) VALUES ({[Crypto.getHash (tokenOut.Hash)]}, {[Crypto.getSalt (tokenOut.Hash)]}, {[timeNow]}, {[user]}));
 		return {Id = newId, Secret = tokenOut.Token}
 
-fun loadUser (t : token) : transaction option user =
+fun loadUser (t : token) : transaction (option user) =
 		rows <- queryL (SELECT * FROM userTokens WHERE Id = t.Id);
 		case rows of
 				[] => return None
@@ -117,6 +118,6 @@ fun loadUser (t : token) : transaction option user =
 				timeNow <- now;
 				verified <- verify t.Secret row.TokenHash row.TokenSalt;
 				if (addHours 2 row.WhenCreated > timeNow && verified) then
-						return Some row.User
+						return (Some row.UserTokens.User)
 				else
 						return None
