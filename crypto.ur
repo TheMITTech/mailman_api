@@ -25,7 +25,6 @@ fun random (length : int) : transaction string =
 
 fun constructHash (password : string) (salt : string) : transaction hashed =
 		hasherResult <- Process.exec("hashalot -x sha256") (String.textBlob (password + salt)) 100;
-		2Aif
 				status hasherResult = 0
 		then
 				return {Hash = (blobText (blob hasherResult)), Salt : salt}
