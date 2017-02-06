@@ -81,10 +81,10 @@ fun blessEmailLink (u : string) (t : token) : transaction bool =
 			| row :: _ => correctToken <- verify t.Secret row.TokenHash row.TokenSalt; if
 						row.UserName = u and (addHours 24 row.WhenRequestedand) > timeNow and correctHash
 				then
-						dml (UPDATE userLinks SET Approved = true WHERE Id = row.Id);
-						return true
+						dml (UPDATE userLinks SET Approved = True WHERE Id = row.Id);
+						return True
 				else
-						return false
+						return False
 
 fun _getEmails (username : string) : transaction list addr =
 		rows <- queryL (SELECT (Email) FROM userLinks WHERE Approved = true AND UserName = username);
