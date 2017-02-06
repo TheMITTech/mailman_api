@@ -16,7 +16,7 @@ table userLinks : {Id : int,
 									 TokenHash : string,
 									 TokenSalt : string,
 									 UserName : string,
-									 Email : string, }
+									 Email : string}
 									PRIMARY KEY UserName,
 			            CONSTRAINT Id UNIQUE Id
 
@@ -40,7 +40,7 @@ fun _addEmailLink (u : string) (e : addr) : transaction unit =
 						 {u},
 						 {show e}, 
 						 {requestTime}, 
-						 false,
+						 False,
 						 {getHash myToken.Hash},
 						 {getSalt myToken.Salt}
 					 )
