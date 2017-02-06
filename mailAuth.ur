@@ -105,8 +105,8 @@ fun newToken (u : user) : transaction token =
 		tokenOut <- Crypto.token 100;
 		timeNow <- now;
 		newId <- nextval ids;
-		dml (INSERT INTO userTokens (TokenHash, TokenSalt, WhenCreated, UserName) VALUES {Crypto.getHash (tokenOut.Hash)}, {Crypto.getSalt (tokenOut.Hash)}, {timeNow}, {show user});
-		return [Id = newId, Secret = tokenOut.Token]
+		dml (INSERT INTO userTokens (TokenHash, TokenSalt, WhenCreated, UserName) VALUES ({Crypto.getHash (tokenOut.Hash)}, {Crypto.getSalt (tokenOut.Hash)}, {timeNow}, {show user}));
+		return {Id = newId, Secret = tokenOut.Token}
 
 fun loadUser (t : token) : transaction option user =
 		rows <- queryL (SELECT * FROM userTokens WHERE Id = t.Id);
