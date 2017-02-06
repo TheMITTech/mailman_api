@@ -1,6 +1,6 @@
+library ../uw-process
 
 $/top
 $/list
-library ../uw_process
 mailAuth
 crypto
