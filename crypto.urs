@@ -6,3 +6,4 @@ val hash : string -> transaction hashed
 val hashWithSalt : string -> int -> transaction hashed
 val verify : string -> string -> string -> transaction bool (* pass -> hash -> salt *)
 val random : int -> transaction string
+val token : int -> transaction {Token : string, Hash : hashed}

@@ -25,10 +25,14 @@ fun random (length : int) : transaction string =
 
 fun constructHash (password : string) (salt : string) : transaction hashed =
 		hasherResult <- Process.exec("hashalot -x sha256") (String.textBlob (password + salt)) 100;
-		if
+		2Aif
 				status hasherResult = 0
 		then
 				return {Hash = (blobText (blob hasherResult)), Salt : salt}
 		else
 				return (error <xml><head/><body>ERROR: Function 'constructHash' generated non-zero exit code.</body></xml>)
 
+fun token (length : int) : transaction hashed =
+		out <- random length;
+		hashOut <- hash out;
+		return {Token = out, Hash = hashOut}
