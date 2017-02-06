@@ -115,7 +115,7 @@ fun loadUser (t : token) : transaction option user =
 			| row :: _ => 
 				timeNow <- now;
 				verified <- verify t.Secret row.TokenHash row.TokenSalt;
-				if addHours 2 row.WhenCreated > timeNow and verified then
+				if (addHours 2 row.WhenCreated > timeNow && verified) then
 						return Some row.User
 				else
 						return None
