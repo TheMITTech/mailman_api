@@ -97,7 +97,7 @@ fun signIn (username : string) (password : string) : transaction option user =
 				[] => return None
 			| row :: _ => correctPassword <- verify password row.Hash row.Salt;
 				if correctPassword then
-						return Some [UserName = username, Emails = releventEmails]
+						return Some username(*{UserName = username, Emails = releventEmails}*)
 				else
 						return None
 
