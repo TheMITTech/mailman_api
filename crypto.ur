@@ -28,7 +28,7 @@ fun constructHash (password : string) (salt : string) : transaction hashed =
 		if
 				status hasherResult = 0
 		then
-				return {Hash = (blobText (blob hasherResult)), Salt : salt}
+				return {Hash = (blobText (blob hasherResult)), Salt = salt}
 		else
 				return (error <xml><head/><body>ERROR: Function 'constructHash' generated non-zero exit code.</body></xml>)
 
