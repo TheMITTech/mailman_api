@@ -79,13 +79,19 @@ fun blessEmailLink (u : string) (t : token) : transaction bool =
 		rows <- queryL (SELECT * FROM userLinks WHERE Id = {[t.Id]});
 		case rows of
 				[] => return False
-			| row :: _ => correctToken <- verify t.Secret row.UserLinks.TokenHash row.UserLinks.TokenSalt; if
-						row.UserLinks.UserName = u && (addSeconds row.UserLinks.WhenRequestedand (24 * 3600)) > timeNow && correctToken
-				then
-						dml (UPDATE userLinks SET Approved = True WHERE Id = {[row.UserLinks.Id]});
-						return True
-				else
-						return False
+			| row :: _ =>
+				correctToken <- verify t.Secret row.UserLinks.TokenHash row.UserLinks.TokenSalt;
+				 if
+						  row.UserLinks.UserName = u
+							&&
+							ge (addSeconds row.UserLinks.WhenRequestedand (24 * 3600)) timeNow
+							&&
+							correctToken
+				 then
+						 dml (UPDATE userLinks SET Approved = TRUE WHERE Id = {[t.Id]});
+						 return True
+				 else
+						 return False
 
 fun _getEmails (username : string) : transaction (list (option addr)) =
 		rows <- queryL (SELECT * FROM userLinks WHERE userLinks.Approved = {[True]} AND userLinks.UserName = {[show username]});
