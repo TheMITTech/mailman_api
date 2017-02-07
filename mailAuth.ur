@@ -46,6 +46,39 @@ fun _addEmailLink (u : string) (e : addr) : transaction unit =
 					 )
 				)
 
+fun _alphanumeric (s : string) : bool =
+		let
+				fun alphanumericChar (c : char) : bool =
+						case (String.index "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" c) of
+								None => False
+							| Some _ => True
+		in
+				String.all alphanumericChar s
+		end
+
+fun readToken (s : string) : option token =
+		case (String.split (String.trim s) #".") of
+				None => None
+			| Some (a : string, b : string) => (
+				let
+						val maybeId : option int = read a
+						val saneSecret : bool = _alphanumeric b
+				in
+						case maybeId of
+								None => None
+							| Some id => (
+								if
+										saneSecret
+								then
+										Some {Secret = b, Id = id}
+								else
+										None
+								)
+				end
+				)
+
+val token_show = mkShow (fn (x : token) => (show x.Id) ^ x.Secret)
+
 fun usernameExists (username : string) : transaction bool =
 		rows <- queryL (SELECT * FROM userCredentials WHERE userCredentials.UserName = {[username]});
 		return (List.length rows > 0)
