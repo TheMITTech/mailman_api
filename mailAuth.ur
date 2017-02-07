@@ -48,7 +48,7 @@ fun _addEmailLink (u : string) (e : addr) : transaction unit =
 
 fun usernameExists (username : string) : transaction bool =
 		rows <- queryL (SELECT * FROM userCredentials WHERE userCredentials.UserName = {[username]});
-		return (rows <> [])
+		return (List.length rows > 0)
 
 fun addEmailLink (u : user) (e : addr) : transaction unit =
 		_addEmailLink (show u) e
