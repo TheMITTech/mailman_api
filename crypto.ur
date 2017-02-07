@@ -34,7 +34,7 @@ fun verify (password : string) (correctHash : string) (salt : string): transacti
 		guess <- constructHash password salt;
 		return (correctHash = (getHash guess))
 
-fun token (length : int) : transaction hashed =
+fun token (length : int) =
 		out <- random length;
 		hashOut <- hash out;
 		return {Token = out, Hash = hashOut}
