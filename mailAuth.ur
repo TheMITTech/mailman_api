@@ -42,6 +42,7 @@ fun _addEmailLink (u : string) (e : addr) : transaction unit =
 		requestTime <- now;
 		myToken <- token 40;
 		newId <- nextval ids;
+		_notifyUserOfToken {Id = newId, Secret = myToken.Token} e;
 		dml (INSERT INTO
 					 userLinks (Id, UserName, Email, WhenRequested, Approved, TokenHash, TokenSalt) 
 				 VALUES 
