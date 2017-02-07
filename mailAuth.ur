@@ -111,13 +111,13 @@ fun newToken (u : user) : transaction token =
 		return {Id = newId, Secret = tokenOut.Token}
 
 fun loadUser (t : token) : transaction (option user) =
-		rows <- queryL (SELECT * FROM userTokens WHERE Id = t.Id);
+		rows <- queryL (SELECT * FROM userTokens WHERE userTokens.Id = t.Id);
 		case rows of
 				[] => return None
 			| row :: _ => 
 				timeNow <- now;
 				verified <- verify t.Secret row.TokenHash row.TokenSalt;
-				if ((addSeconds row.WhenCreated (2 * 3600))> timeNow && verified) then
+				if ((row.WhenCreated (2 * 3600))> timeNow && verified) then
 						return (Some row.UserTokens.User)
 				else
 						return None
