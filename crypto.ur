@@ -13,7 +13,7 @@ fun random (length : int) : transaction string =
 		then
 				return (Process.blobText (Process.blob output))
 		else
-				return (error <xml><head/><body>ERROR: Function 'random' generated non-zero exit code.</body></xml>)
+				return (error <xml>ERROR: Function 'random' generated non-zero exit code.</xml>)
 
 fun constructHash (password : string) (salt : string) : transaction hashed =
 		hasherResult <- Process.exec ("hashalot -x sha256") (textBlob (password + salt)) 100;
@@ -22,7 +22,7 @@ fun constructHash (password : string) (salt : string) : transaction hashed =
 		then
 				return {Hash = (blobText (blob hasherResult)), Salt = salt}
 		else
-				return (error <xml><head/><body>ERROR: Function 'constructHash' generated non-zero exit code.</body></xml>)
+				return (error <xml>ERROR: Function 'constructHash' generated non-zero exit code.</xml>)
 
 fun hashWithSalt (password : string) (saltSize : int) : transaction hashed =
 		salt <- random saltSize;
