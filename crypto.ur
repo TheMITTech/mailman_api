@@ -7,7 +7,7 @@ val getHash = fn x => x.Hash
 val getSalt = fn x => x.Salt
 
 fun random (length : int) : transaction string =
-		output <- Process.exec ("< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-" + show length + "};echo;") (textBlob "") (length + 5);
+		output <- Process.exec ("< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-" ^ show length ^ "};echo;") (textBlob "") (length + 5);
 		if
 				status output = 0
 		then
@@ -16,7 +16,7 @@ fun random (length : int) : transaction string =
 				return (error <xml>ERROR: Function 'random' generated non-zero exit code.</xml>)
 
 fun constructHash (password : string) (salt : string) : transaction hashed =
-		hasherResult <- Process.exec ("hashalot -x sha256") (textBlob (password + salt)) 100;
+		hasherResult <- Process.exec ("hashalot -x sha256") (textBlob (password ^ salt)) 100;
 		if
 				status hasherResult = 0
 		then
