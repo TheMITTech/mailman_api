@@ -1,4 +1,4 @@
 type addr = string
 
-val addr_show = (fn x => x)
-val read = (fn x => Some x)
+val addr_show = mkShow (fn x => x)
+val fromString (s : string) : option string = Some s 
