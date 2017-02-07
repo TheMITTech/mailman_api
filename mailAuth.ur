@@ -61,7 +61,7 @@ fun writeAccount (u : string) (p : string) : transaction bool =
 		then
 				return False
 		else
-				dml (INSERT INTO userCredentials (UserName, Hash, Salt) VALUES ({u}, {getHash hashedPass}, {getSalt hashedPass}));
+				dml (INSERT INTO userCredentials (UserName, Hash, Salt) VALUES ({[u]}, {[getHash hashedPass]}, {[getSalt hashedPass]}));
 				return True
 
 fun newAccount (u : string) (p : string) (e : addr) : transaction bool =
