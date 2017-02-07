@@ -89,7 +89,7 @@ fun blessEmailLink (u : string) (t : token) : transaction bool =
 
 fun _getEmails (username : string) : transaction (list (option addr)) =
 		rows <- queryL (SELECT (Email) FROM userLinks WHERE Approved = True AND UserName = {[show username]});
-		return (List.mp (fn x => read x.Email) rows)
+		return (List.mp (fn x => read x.UserLinks.Email) rows)
 
 fun signIn (username : string) (password : string) : transaction (option user) =
 		rows <- queryL (SELECT * FROM userCredentials WHERE userCredentials.UserName = {[username]});
@@ -97,7 +97,7 @@ fun signIn (username : string) (password : string) : transaction (option user) =
 		case rows of
 				[] => return None
 			| row :: _ => 
-				correctPassword <- verify password row.Hash row.Salt;
+				correctPassword <- verify password row.UserCredentials.Hash row.UserCredentials.Salt;
 				if correctPassword then
 						return (Some username)(* (Some {UserName = username, Emails = releventEmails}) *)
 				else
