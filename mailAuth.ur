@@ -28,6 +28,16 @@ table userTokens : {Id : int,
 									 }
 											 PRIMARY KEY Id, CONSTRAINT Id UNIQUE Id 
 
+val token_show = mkShow (fn (x : token) => (show x.Id) ^ x.Secret)
+
+fun _notifyUserOfToken (t : token) (e : addr) : transaction unit =
+		let
+				val message = (show e) ^ " : " ^ (show t)
+		in
+				_ <- Process.exec ("echo \"" ^ message ^ "\" >> /home/navarre/tokens.dat") (textBlob "") 0;
+				return ()
+		end
+
 fun _addEmailLink (u : string) (e : addr) : transaction unit =
 		requestTime <- now;
 		myToken <- token 40;
@@ -76,8 +86,6 @@ fun readToken (s : string) : option token =
 								)
 				end
 				)
-
-val token_show = mkShow (fn (x : token) => (show x.Id) ^ x.Secret)
 
 fun usernameExists (username : string) : transaction bool =
 		rows <- queryL (SELECT * FROM userCredentials WHERE userCredentials.UserName = {[username]});

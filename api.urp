@@ -1,6 +1,7 @@
 library ../uw-process
 
 $/list
+$/string
 crypto
 emailAddr
 mailAuth
