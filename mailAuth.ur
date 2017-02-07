@@ -84,7 +84,7 @@ fun blessEmailLink (u : string) (t : token) : transaction bool =
 				 if
 						  row.UserLinks.UserName = u
 							&&
-							ge (addSeconds row.UserLinks.WhenRequestedand (24 * 3600)) timeNow
+							ge (addSeconds row.UserLinks.WhenRequested (24 * 3600)) timeNow
 							&&
 							correctToken
 				 then
