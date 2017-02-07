@@ -80,7 +80,7 @@ fun blessEmailLink (u : string) (t : token) : transaction bool =
 		case rows of
 				[] => return False
 			| row :: _ => correctToken <- verify t.Secret row.TokenHash row.TokenSalt; if
-						row.UserName = u && (Datetime.addHours 24 row.WhenRequestedand) > timeNow && correctToken
+						row.UserName = u && (addSeconds row.WhenRequestedand (24 * 3600)) > timeNow && correctToken
 				then
 						dml (UPDATE userLinks SET Approved = True WHERE Id = row.Id);
 						return True
@@ -117,7 +117,7 @@ fun loadUser (t : token) : transaction (option user) =
 			| row :: _ => 
 				timeNow <- now;
 				verified <- verify t.Secret row.TokenHash row.TokenSalt;
-				if (Datetime.addHours 2 row.WhenCreated > timeNow && verified) then
+				if ((addSeconds row.WhenCreated (2 * 3600))> timeNow && verified) then
 						return (Some row.UserTokens.User)
 				else
 						return None
