@@ -87,8 +87,8 @@ fun blessEmailLink (u : string) (t : token) : transaction bool =
 				else
 						return False
 
-fun _getEmails (username : string) : transaction (list addr) =
-		rows <- queryL (SELECT (Email) FROM userLinks WHERE Approved = True AND UserName = {[username]});
+fun _getEmails (username : string) : transaction (list (option addr)) =
+		rows <- queryL (SELECT (Email) FROM userLinks WHERE Approved = True AND UserName = {[show username]});
 		return (List.mp (fn x => read x.Email) rows)
 
 fun signIn (username : string) (password : string) : transaction (option user) =
@@ -107,7 +107,7 @@ fun newToken (u : user) : transaction token =
 		tokenOut <- Crypto.token 100;
 		timeNow <- now;
 		newId <- nextval ids;
-		dml (INSERT INTO userTokens (TokenHash, TokenSalt, WhenCreated, UserName) VALUES ({[Crypto.getHash (tokenOut.Hash)]}, {[Crypto.getSalt (tokenOut.Hash)]}, {[timeNow]}, {[user]}));
+		dml (INSERT INTO userTokens (TokenHash, TokenSalt, WhenCreated, UserName) VALUES ({[Crypto.getHash (tokenOut.Hash)]}, {[Crypto.getSalt (tokenOut.Hash)]}, {[timeNow]}, {[u]}));
 		return {Id = newId, Secret = tokenOut.Token}
 
 fun loadUser (t : token) : transaction (option user) =
