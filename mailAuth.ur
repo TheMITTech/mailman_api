@@ -80,7 +80,7 @@ fun blessEmailLink (u : string) (t : token) : transaction bool =
 		case rows of
 				[] => return False
 			| row :: _ => correctToken <- verify t.Secret row.TokenHash row.TokenSalt; if
-						row.UserName = u && (Datetime.addHours 24 row.WhenRequestedand) > timeNow && correctHash
+						row.UserName = u && (Datetime.addHours 24 row.WhenRequestedand) > timeNow && correctToken
 				then
 						dml (UPDATE userLinks SET Approved = True WHERE Id = row.Id);
 						return True
