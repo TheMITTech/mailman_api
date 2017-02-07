@@ -76,7 +76,7 @@ fun newAccount (u : string) (p : string) (e : addr) : transaction bool =
 
 fun blessEmailLink (u : string) (t : token) : transaction bool =
 		timeNow <- now;
-		rows <- queryL (SELECT * FROM userLinks WHERE Id = {[t.Id]});
+		rows <- queryL (SELECT * FROM userLinks WHERE userLinks.Id = {[t.Id]});
 		case rows of
 				[] => return False
 			| row :: _ =>
