@@ -116,8 +116,8 @@ fun loadUser (t : token) : transaction (option user) =
 				[] => return None
 			| row :: _ => 
 				timeNow <- now;
-				verified <- verify t.Secret row.TokenHash row.TokenSalt;
-				if ((row.WhenCreated (2 * 3600))> timeNow && verified) then
-						return (Some row.UserTokens.User)
+				verified <- verify t.Secret row.UserTokens.TokenHash row.UserTokens.TokenSalt;
+				if ((row.UserTokens.WhenCreated (2 * 3600))> timeNow && verified) then
+						return (Some row.UserTokens.UserName)
 				else
 						return None
