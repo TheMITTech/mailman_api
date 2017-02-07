@@ -30,19 +30,19 @@ table userTokens : {Id : int,
 
 fun _addEmailLink (u : string) (e : addr) : transaction unit =
 		requestTime <- now;
-		myToken <- Crypto.token 40;
+		myToken <- token 40;
 		newId <- nextval ids;
 		dml (INSERT INTO
 					 userLinks (Id, UserName, Email, WhenRequested, Approved, TokenHash, TokenSalt) 
 				 VALUES 
 					 (
-						 {[show newId]},
+						 {[newId]},
 						 {[u]},
 						 {[show e]}, 
-						 {[show requestTime]},
+						 {[requestTime]},
 						 {[False]},
 						 {[getHash myToken.Hash]},
-						 {[getSalt myToken.Salt]}
+						 {[getSalt myToken.Hash]}
 					 )
 				)
 
