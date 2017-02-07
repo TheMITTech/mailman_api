@@ -111,7 +111,7 @@ fun newToken (u : user) : transaction token =
 		return {Id = newId, Secret = tokenOut.Token}
 
 fun loadUser (t : token) : transaction (option user) =
-		rows <- queryL (SELECT * FROM userTokens WHERE userTokens.Id = t.Id);
+		rows <- queryL (SELECT * FROM userTokens WHERE userTokens.Id = {[t.Id]});
 		case rows of
 				[] => return None
 			| row :: _ => 
