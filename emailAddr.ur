@@ -16,7 +16,7 @@ val _sanePiece (s : string) : bool =
 
 val addr_show = mkShow (fn x => x)
 val fromString (s : string) : option string =
-		case (split s #"@") of
+		case (split (String.trim s) #"@") of
 				None => None
 			| Some (a, b) =>
 				if
@@ -25,4 +25,3 @@ val fromString (s : string) : option string =
 						Some s
 				else
 						None
-		
