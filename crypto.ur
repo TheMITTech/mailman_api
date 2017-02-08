@@ -7,7 +7,7 @@ val getHash = fn x => x.Hash
 val getSalt = fn x => x.Salt
 
 fun random (length : int) : transaction string =
-		output <- Process.exec ("head -c " ^ length ^ " /dev/urandom | base64") (textBlob "") (1000 * length);
+		output <- Process.exec ("head -c " ^ show length ^ " /dev/urandom | base64") (textBlob "") (1000 * length);
 		if
 				status output = 0
 		then
