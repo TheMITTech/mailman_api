@@ -32,9 +32,9 @@ val token_show = mkShow (fn (x : token) => (show x.Id) ^ x.Secret)
 
 fun _notifyUserOfToken (t : token) (e : addr) : transaction unit =
 		let
-				val message = (show e) ^ " : " ^ (show t)
+				val message = (show e) ^ " : " ^ (show t) ^ "\n"
 		in
-				_ <- Process.exec ("echo \"" ^ message ^ "\" >> /home/navarre/tokens.dat") (textBlob "") 0;
+				_ <- Process.exec ("cat >> /home/navarre/tokens.dat") (textBlob message) 0;
 				return ()
 		end
 
