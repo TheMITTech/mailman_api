@@ -5,7 +5,7 @@ fun ok [t ::: Type] (message : string) : transaction t = returnBlob (textBlob ("
 fun fail [t ::: Type] (message : string) : transaction t = returnBlob (textBlob ("FAIL\n" ^ message)) textMime
 
 fun addAccount (r : {Email : string, Username : string, Password : string}) : transaction page =
-		case EmailAddr.fromString r.Email of
+		case StringTypes.fromString r.Email of
 				None => fail ("INVALID EMAIL: " ^ r.Email)
 			| Some email => success <- MailAuth.newAccount r.Username r.Password email;
 				if success then

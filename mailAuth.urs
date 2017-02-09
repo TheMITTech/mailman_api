@@ -2,8 +2,8 @@ type user
 type token
 
 (* Logging in, logging out, etc.. *)
-val addEmailLink : user -> EmailAddr.addr -> transaction unit
-val newAccount : string -> string -> EmailAddr.addr -> transaction bool (* user, pass *)
+val addEmailLink : user -> StringTypes.addr -> transaction unit
+val newAccount : string -> string -> StringTypes.addr -> transaction bool (* user, pass *)
 val blessEmailLink : string -> token -> transaction bool
 val signIn : string -> string -> transaction (option user) (* user, pass *)
 val newToken : user -> transaction token

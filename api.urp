@@ -5,8 +5,8 @@ sql schema.sql
 
 $/list
 $/string
+stringTypes
 crypto
-emailAddr
 mailAuth
 api
 dummy

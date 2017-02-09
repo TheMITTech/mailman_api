@@ -1,5 +1,5 @@
 open Crypto
-open EmailAddr
+open StringTypes
 
 type user = string
 type token = {Id : int, Secret : string}
