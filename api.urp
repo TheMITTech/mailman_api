@@ -1,7 +1,11 @@
 library ../uw-process
+allow mime text/plain
+database dbname=test
+sql schema.sql
 
 $/list
 $/string
 crypto
 emailAddr
 mailAuth
+mail
