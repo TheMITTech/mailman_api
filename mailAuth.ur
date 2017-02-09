@@ -107,14 +107,15 @@ fun writeAccount (u : string) (p : string) : transaction bool =
 				return True
 
 fun newAccount (u : string) (p : string) (e : addr) : transaction bool =
-		exists <- writeAccount u p;
+		success <- writeAccount u p;
 		if
-				exists
+				success
 		then
-				return False
-		else
 				_addEmailLink u e;
 				return True
+		else
+				return False
+
 
 fun blessEmailLink (u : string) (t : token) : transaction bool =
 		timeNow <- now;
