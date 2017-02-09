@@ -7,11 +7,11 @@ val getHash = fn x => x.Hash
 val getSalt = fn x => x.Salt
 
 fun random (length : int) : transaction string =
-		output <- Process.exec ("head -c " ^ show length ^ " /dev/urandom | base64") (textBlob "") (1000 * length);
+		output <- Process.exec ("head -c " ^ show length ^ " /dev/urandom | base64") (textBlob "") (10 * length);
 		if
 				status output = 0
 		then
-				return (Process.blobText (Process.blob output))
+				return (String.trim (Process.blobText (Process.blob output)))
 		else
 				return (error <xml>ERROR: Function 'random' generated non-zero exit code.</xml>)
 
@@ -20,7 +20,7 @@ fun constructHash (password : string) (salt : string) : transaction hashed =
 		if
 				status hasherResult = 0
 		then
-				return {Hash = (blobText (blob hasherResult)), Salt = salt}
+				return {Hash = (String.trim (blobText (blob hasherResult))), Salt = salt}
 		else
 				return (error <xml>ERROR: Function 'constructHash' generated non-zero exit code.</xml>)
 

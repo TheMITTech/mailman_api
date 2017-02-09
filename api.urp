@@ -8,4 +8,6 @@ $/string
 crypto
 emailAddr
 mailAuth
+api
+dummy
 mail

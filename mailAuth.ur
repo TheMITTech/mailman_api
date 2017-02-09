@@ -28,7 +28,7 @@ table userTokens : {Id : int,
 									 }
 											 PRIMARY KEY Id, CONSTRAINT Id UNIQUE Id 
 
-val token_show = mkShow (fn (x : token) => (show x.Id) ^ x.Secret)
+val token_show = mkShow (fn (x : token) => (show x.Id) ^ "." ^ x.Secret)
 
 fun _notifyUserOfToken (t : token) (e : addr) : transaction unit =
 		let
@@ -57,14 +57,14 @@ fun _addEmailLink (u : string) (e : addr) : transaction unit =
 					 )
 				)
 
-fun _alphanumeric (s : string) : bool =
+fun _hexchars (s : string) : bool =
 		let
-				fun alphanumericChar (c : char) : bool =
-						case (String.index "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" c) of
+				fun hexChar (c : char) : bool =
+						case (String.index "=+/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" c) of
 								None => False
 							| Some _ => True
 		in
-				String.all alphanumericChar s
+				String.all hexChar s
 		end
 
 fun readToken (s : string) : option token =
@@ -73,7 +73,7 @@ fun readToken (s : string) : option token =
 			| Some (a : string, b : string) => (
 				let
 						val maybeId : option int = read a
-						val saneSecret : bool = _alphanumeric b
+						val saneSecret : bool = _hexchars b
 				in
 						case maybeId of
 								None => None
@@ -153,7 +153,7 @@ fun signIn (username : string) (password : string) : transaction (option user) =
 						return None
 
 fun newToken (u : user) : transaction token =
-		tokenOut <- Crypto.token 100;
+		tokenOut <- Crypto.token 20;
 		timeNow <- now;
 		newId <- nextval ids;
 		dml (INSERT INTO userTokens (TokenHash, TokenSalt, WhenCreated, UserName, Id) VALUES ({[Crypto.getHash (tokenOut.Hash)]}, {[Crypto.getSalt (tokenOut.Hash)]}, {[timeNow]}, {[u]}, {[newId]}));
