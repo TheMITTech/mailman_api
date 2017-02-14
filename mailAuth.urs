@@ -1,4 +1,5 @@
 type user
+type userName
 type token
 
 (* Logging in, logging out, etc.. *)
@@ -12,3 +13,7 @@ val loadUser : token -> transaction (option user) (* user, token *)
 (* Token stuff *)
 val readToken : string -> option token
 val token_show : show token
+
+(* Type-safe stuff! *)
+val blessUserName : string -> transaction (option userName)
+val show_username : show userName

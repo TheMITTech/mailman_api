@@ -3,6 +3,7 @@ open StringTypes
 
 type user = string
 type token = {Id : int, Secret : string}
+type userName = string
 
 sequence ids
 
@@ -170,3 +171,11 @@ fun loadUser (t : token) : transaction (option user) =
 						return (Some row.UserTokens.UserName)
 				else
 						return None
+
+fun blessUserName (name : string) : transaction (option string) =
+		rows <- queryL (SELECT userCredentials.UserName FROM userCredentials WHERE userCredentials.UserName = {[name]});
+		case rows of
+				[] => return None
+			| item :: _ => return (Some name)
+
+val show_username = mkShow (fn (x : userName) => x)
